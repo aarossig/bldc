@@ -153,11 +153,18 @@ CSRC = $(STARTUPSRC) \
        mcpwm_foc.c \
        $(HWSRC) \
        $(APPSRC) \
-       $(NRFSRC)
+       $(NRFSRC) \
+       applications/app_voyager2/external/nanopb/pb_common.c \
+       applications/app_voyager2/external/nanopb/pb_decode.c \
+       applications/app_voyager2/external/nanopb/pb_encode.c \
+       applications/app_voyager2/common/comms/esc_interface.pb.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CPPSRC = applications/app_voyager2/powertrain_control_manager_host.cpp \
+CPPSRC = $(CHIBIOS)/os/various/cpp_wrappers/syscalls_cpp.cpp \
+    applications/app_voyager2/powertrain_control_manager_host.cpp \
+    applications/app_voyager2/common/comms/crc16.cpp \
+    applications/app_voyager2/common/comms/rfc1662_transport.cpp \
     applications/app_voyager2/common/sys/time.cpp \
     applications/app_voyager2.cpp
 
@@ -193,7 +200,8 @@ INCDIR = $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
          $(HWINC) \
          $(APPINC) \
          $(NRFINC) \
-         applications/app_voyager2
+         applications/app_voyager2 \
+         applications/app_voyager2/external/nanopb
 
 #
 # Project, sources and paths

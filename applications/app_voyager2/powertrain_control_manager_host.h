@@ -23,6 +23,7 @@
 
 #include "common/comms/chibi_rfc1662_transport.h"
 #include "common/comms/esc_interface.pb.h"
+#include "common/comms/pcm_common.h"
 #include "common/util/non_copyable.h"
 
 namespace voyager {
@@ -46,12 +47,32 @@ class PowertrainControlManagerHost : public NonCopyable {
    */
   void Start();
 
+ protected:
+  /**
+   * Handles an incoming state exchange.
+   *
+   * @param state The state to process and update local configuration.
+   */
+  virtual void ProcessExchangeState(
+      const voyager_EscExchangeStateRequest& state) = 0;
+
+  /**
+   * Fills an ESC state exchange with current system state.
+   *
+   * @param state The state to fill in to be sent to the client.
+   */
+  virtual void FillExchangeStateResponse(
+      voyager_EscExchangeStateResponse *state) = 0;
+
  private:
   //! The timeout duration for receiving a command from the PCM.
   constexpr static uint64_t kRequestTimeoutUs = 100000;
 
   //! The underlying transport layer to send/receive frames from.
   ChibiRfc1662Transport<> transport_;
+
+  //! The buffer to encode response messages into.
+  uint8_t response_buffer_[kMaxPcmMessageSize];
 
   //! The current request made by the PCM.
   voyager_EscRequest request_;
@@ -71,6 +92,12 @@ class PowertrainControlManagerHost : public NonCopyable {
    * @param state The state to assign to the ESC.
    */
   void HandleStateExchange(const voyager_EscExchangeStateRequest& state);
+
+  /**
+   * Serializes and sends the current response in the response_buffer. This
+   * function must only be called when a valid response has been populated.
+   */
+  void SendResponse();
 };
 
 }  // namespace voyager

@@ -24,13 +24,34 @@
 #include "hwconf/hw.h"
 #include "powertrain_control_manager_host.h"
 
+namespace voyager {
+
+/* VESC Powertrain Control Module Host ****************************************/
+
+class VescPowertrainControlManagerHost : public PowertrainControlManagerHost {
+ public:
+  VescPowertrainControlManagerHost(SerialDriver *serial_device,
+      SerialConfig *serial_config)
+          : PowertrainControlManagerHost(serial_device, serial_config) {}
+
+ protected:
+  virtual void ProcessExchangeState(
+      const voyager_EscExchangeStateRequest& state) override {
+    // TODO: Implement me.
+  }
+
+  virtual void FillExchangeStateResponse(
+      voyager_EscExchangeStateResponse *state) override {
+    // TODO: Implement me.
+  }
+};
+
 /* PCM Host Thread ************************************************************/
 
 static THD_WORKING_AREA(pcmHostThreadWorkingArea, 2048);
 
 static THD_FUNCTION(pcmHostThread, arg) {
-  voyager::Singleton<voyager::PowertrainControlManagerHost>::Instance()
-      ->Start();
+  Singleton<VescPowertrainControlManagerHost>::Instance()->Start();
 }
 
 /* Init/Config ****************************************************************/
@@ -53,7 +74,7 @@ extern "C" void app_uartcomm_start() {
   };
 
   voyager::InitTime();
-  voyager::Singleton<voyager::PowertrainControlManagerHost>::Init(
+  Singleton<VescPowertrainControlManagerHost>::Init(
       &HW_SERIAL_DEV, &serial_config);
 
   chThdCreateStatic(pcmHostThreadWorkingArea, sizeof(pcmHostThreadWorkingArea),
@@ -64,3 +85,5 @@ extern "C" void app_uartcomm_configure(uint32_t baudrate) {
   // This function has no implementation. Baud rate is hardcoded to match that
   // of the PCM.
 }
+
+}  // namespace voyager

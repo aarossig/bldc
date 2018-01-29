@@ -17,6 +17,9 @@
 
 #include "powertrain_control_manager_host.h"
 
+#include <pb_decode.h>
+#include <pb_encode.h>
+
 namespace voyager {
 
 PowertrainControlManagerHost::PowertrainControlManagerHost(
@@ -48,10 +51,10 @@ void PowertrainControlManagerHost::HandleFrame(const uint8_t *frame,
   } else {
     switch (request_.which_request) {
       case voyager_EscRequest_esc_exchange_state_request_tag:
-        HandleStateExchange(request_.esc_exchange_state_request);
+        HandleStateExchange(request_.request.esc_exchange_state_request);
         break;
       default:
-        LOGE("Received invalid request");
+        // TODO: Handle invalid request.
         break;
     }
   }
@@ -59,7 +62,26 @@ void PowertrainControlManagerHost::HandleFrame(const uint8_t *frame,
 
 void PowertrainControlManagerHost::HandleStateExchange(
     const voyager_EscExchangeStateRequest& state) {
+  ProcessExchangeState(state);
 
+  response_ = voyager_EscResponse_init_default;
+  response_.which_response =
+      voyager_EscResponse_esc_exchange_state_response_tag;
+  FillExchangeStateResponse(&response_.response.esc_exchange_state_response);
+  SendResponse();
+}
+
+void PowertrainControlManagerHost::SendResponse() {
+  pb_ostream_t stream = pb_ostream_from_buffer(response_buffer_,
+                                               sizeof(response_buffer_));
+  if (!pb_encode(&stream, voyager_EscResponse_fields, &response_)) {
+    // TODO: Handle encoding failures.
+  } else {
+    auto result = transport_.SendFrame(response_buffer_, stream.bytes_written);
+    if (result != SendFrameResult::Success) {
+      // TODO: Handle transmission failures.
+    }
+  }
 }
 
 }  // namespace voyager
