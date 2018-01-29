@@ -5,19 +5,20 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -std=gnu99
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16
   USE_OPT += -DBOARD_OTG_NOVBUSSENS $(build_args)
   USE_OPT += -fsingle-precision-constant -Wdouble-promotion
+  USE_OPT += -Wno-unused-parameter
 endif
 
 # C specific options here (added to USE_OPT).
 ifeq ($(USE_COPT),)
-  USE_COPT = 
+  USE_COPT = -std=gnu99
 endif
 
 # C++ specific options here (added to USE_OPT).
 ifeq ($(USE_CPPOPT),)
-  USE_CPPOPT = -fno-rtti
+  USE_CPPOPT = -fno-rtti -fno-exceptions -std=c++11
 endif
 
 # Enable this if you want the linker to remove unused code and data
@@ -156,7 +157,9 @@ CSRC = $(STARTUPSRC) \
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CPPSRC =
+CPPSRC = applications/app_voyager2/powertrain_control_manager_host.cpp \
+    applications/app_voyager2/common/sys/time.cpp \
+    applications/app_voyager2.cpp
 
 # C sources to be compiled in ARM mode regardless of the global setting.
 # NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler
@@ -189,7 +192,8 @@ INCDIR = $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
          appconf \
          $(HWINC) \
          $(APPINC) \
-         $(NRFINC)
+         $(NRFINC) \
+         applications/app_voyager2
 
 #
 # Project, sources and paths
