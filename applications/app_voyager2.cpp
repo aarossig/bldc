@@ -22,7 +22,9 @@
 #include "common/sys/time.h"
 #include "common/util/singleton.h"
 #include "hwconf/hw.h"
+#include "mc_interface.h"
 #include "powertrain_control_manager_host.h"
+#include "timeout.h"
 
 namespace voyager {
 
@@ -37,12 +39,14 @@ class VescPowertrainControlManagerHost : public PowertrainControlManagerHost {
  protected:
   virtual void ProcessExchangeState(
       const voyager_EscExchangeStateRequest& state) override {
-    // TODO: Implement me.
+    // TODO: Implement some scaling.
+    mc_interface_set_current(0.75f + state.throttle_position);
+    timeout_reset();
   }
 
   virtual void FillExchangeStateResponse(
       voyager_EscExchangeStateResponse *state) override {
-    // TODO: Implement me.
+    state->motor_rpm = mc_interface_get_rpm();
   }
 };
 
@@ -58,13 +62,9 @@ static THD_FUNCTION(pcmHostThread, arg) {
 
 extern "C" void app_uartcomm_start() {
   palSetPadMode(HW_SERIAL_TX_PORT, HW_SERIAL_TX_PIN,
-      PAL_MODE_ALTERNATE(HW_UART_GPIO_AF)
-          | PAL_STM32_OSPEED_HIGHEST
-          | PAL_STM32_PUDR_PULLUP);
+      PAL_MODE_ALTERNATE(HW_SERIAL_GPIO_AF));
   palSetPadMode(HW_SERIAL_RX_PORT, HW_SERIAL_RX_PIN,
-      PAL_MODE_ALTERNATE(HW_UART_GPIO_AF)
-          | PAL_STM32_OSPEED_HIGHEST
-          | PAL_STM32_PUDR_PULLUP);
+      PAL_MODE_ALTERNATE(HW_SERIAL_GPIO_AF));
 
   SerialConfig serial_config = {
     .speed = 115200,

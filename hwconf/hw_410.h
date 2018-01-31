@@ -111,20 +111,20 @@
 #define HW_SERVO_NUM		2
 
 // UART Peripheral
-#define HW_UART_DEV     UARTD3
-#define HW_UART_GPIO_AF GPIO_AF_USART3
-#define HW_UART_TX_PORT GPIOB
-#define HW_UART_TX_PIN  11
-#define HW_UART_RX_PORT GPIOB
-#define HW_UART_RX_PIN  10
+#define HW_UART_DEV     UARTD6
+#define HW_UART_GPIO_AF GPIO_AF_USART6
+#define HW_UART_TX_PORT GPIOC
+#define HW_UART_TX_PIN  6
+#define HW_UART_RX_PORT GPIOC
+#define HW_UART_RX_PIN  7
 
 // Serial Peripheral
-#define HW_SERIAL_DEV   SD6
-#define HW_SERIAL_GPIO_AF GPIO_AF_USART6
-#define HW_SERIAL_TX_PORT GPIOC
-#define HW_SERIAL_TX_PIN  6
-#define HW_SERIAL_RX_PORT GPIOC
-#define HW_SERIAL_RX_PIN  7
+#define HW_SERIAL_DEV   SD3
+#define HW_SERIAL_GPIO_AF GPIO_AF_USART3
+#define HW_SERIAL_TX_PORT GPIOB
+#define HW_SERIAL_TX_PIN  10
+#define HW_SERIAL_RX_PORT GPIOB
+#define HW_SERIAL_RX_PIN  11
 
 // ICU Peripheral for servo decoding
 #define HW_ICU_DEV			ICUD3
