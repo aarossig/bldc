@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VOYAGER_FIRMWARE_ESC_POWERTRAIN_CONTROL_MANAGER_HOST_H_
-#define VOYAGER_FIRMWARE_ESC_POWERTRAIN_CONTROL_MANAGER_HOST_H_
+#ifndef VOYAGER_FIRMWARE_ESC_ESC_HOST_H_
+#define VOYAGER_FIRMWARE_ESC_ESC_HOST_H_
 
 #include <cstdint>
 #include <hal.h>
@@ -28,7 +28,7 @@
 
 namespace voyager {
 
-class PowertrainControlManagerHost : public NonCopyable {
+class EscHost : public NonCopyable {
  public:
   /**
    * Sets up a powertrain contorl manager host.
@@ -36,8 +36,7 @@ class PowertrainControlManagerHost : public NonCopyable {
    * @param serial_device a serial device to listen to commands on.
    * @param serial_config the configuration for this serial device.
    */
-  PowertrainControlManagerHost(SerialDriver *serial_device,
-      SerialConfig *serial_config);
+  EscHost(SerialDriver *serial_device, SerialConfig *serial_config);
 
   /**
    * Starts the powertrain control manager host. This is a blocking call that
@@ -102,4 +101,4 @@ class PowertrainControlManagerHost : public NonCopyable {
 
 }  // namespace voyager
 
-#endif  // VOYAGER_FIRMWARE_ESC_POWERTRAIN_CONTROL_MANAGER_HOST_H_
+#endif  // VOYAGER_FIRMWARE_ESC_ESC_HOST_H_

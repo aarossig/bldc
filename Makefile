@@ -162,7 +162,7 @@ CSRC = $(STARTUPSRC) \
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 CPPSRC = $(CHIBIOS)/os/various/cpp_wrappers/syscalls_cpp.cpp \
-    applications/app_voyager2/powertrain_control_manager_host.cpp \
+    applications/app_voyager2/esc_host.cpp \
     applications/app_voyager2/common/comms/crc16.cpp \
     applications/app_voyager2/common/comms/rfc1662_transport.cpp \
     applications/app_voyager2/common/sys/time.cpp \

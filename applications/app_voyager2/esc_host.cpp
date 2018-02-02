@@ -15,18 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "powertrain_control_manager_host.h"
+#include "esc_host.h"
 
 #include <pb_decode.h>
 #include <pb_encode.h>
 
 namespace voyager {
 
-PowertrainControlManagerHost::PowertrainControlManagerHost(
+EscHost::EscHost(
     SerialDriver *serial_device, SerialConfig *serial_config)
         : transport_(serial_device, serial_config) {}
 
-void PowertrainControlManagerHost::Start() {
+void EscHost::Start() {
   while (1) {
     const uint8_t *frame = nullptr;
     size_t frame_len = 0;
@@ -43,7 +43,7 @@ void PowertrainControlManagerHost::Start() {
   }
 }
 
-void PowertrainControlManagerHost::HandleFrame(const uint8_t *frame,
+void EscHost::HandleFrame(const uint8_t *frame,
     size_t frame_len) {
   pb_istream_t stream = pb_istream_from_buffer(frame, frame_len);
   if (!pb_decode(&stream, voyager_EscRequest_fields, &request_)) {
@@ -60,7 +60,7 @@ void PowertrainControlManagerHost::HandleFrame(const uint8_t *frame,
   }
 }
 
-void PowertrainControlManagerHost::HandleStateExchange(
+void EscHost::HandleStateExchange(
     const voyager_EscExchangeStateRequest& state) {
   ProcessExchangeState(state);
 
@@ -71,7 +71,7 @@ void PowertrainControlManagerHost::HandleStateExchange(
   SendResponse();
 }
 
-void PowertrainControlManagerHost::SendResponse() {
+void EscHost::SendResponse() {
   pb_ostream_t stream = pb_ostream_from_buffer(response_buffer_,
                                                sizeof(response_buffer_));
   if (!pb_encode(&stream, voyager_EscResponse_fields, &response_)) {

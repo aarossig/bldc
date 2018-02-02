@@ -18,9 +18,13 @@
 #ifndef VOYAGER_FIRMWARE_COMMON_COMMS_PCM_COMMON_H_
 #define VOYAGER_FIRMWARE_COMMON_COMMS_PCM_COMMON_H_
 
+#include <cstddef>
+
 /**
  * @file Common code that is shared between the pcm and esc modules.
  */
+
+// TODO: Rename this file to esc_common.h
 
 namespace voyager {
 

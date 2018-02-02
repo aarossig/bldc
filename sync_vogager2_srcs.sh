@@ -34,8 +34,8 @@ cp $SRC_PATH/firmware/common/comms/esc_interface.pb.h $DEST_PATH/common/comms
 cp $SRC_PATH/firmware/common/comms/pcm_common.h $DEST_PATH/common/comms
 cp $SRC_PATH/firmware/common/sys/time.cpp $DEST_PATH/common/sys
 cp $SRC_PATH/firmware/common/sys/time.h $DEST_PATH/common/sys
-cp $SRC_PATH/firmware/esc/powertrain_control_manager_host.cpp $DEST_PATH
-cp $SRC_PATH/firmware/esc/powertrain_control_manager_host.h $DEST_PATH
+cp $SRC_PATH/firmware/esc/esc_host.cpp $DEST_PATH
+cp $SRC_PATH/firmware/esc/esc_host.h $DEST_PATH
 cp $SRC_PATH/common/comms/crc16.h $DEST_PATH/common/comms
 cp $SRC_PATH/common/comms/crc16.cpp $DEST_PATH/common/comms
 cp $SRC_PATH/common/comms/rfc1662_transport.h $DEST_PATH/common/comms

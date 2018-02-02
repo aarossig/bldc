@@ -23,18 +23,18 @@
 #include "common/util/singleton.h"
 #include "hwconf/hw.h"
 #include "mc_interface.h"
-#include "powertrain_control_manager_host.h"
+#include "esc_host.h"
 #include "timeout.h"
 
 namespace voyager {
 
 /* VESC Powertrain Control Module Host ****************************************/
 
-class VescPowertrainControlManagerHost : public PowertrainControlManagerHost {
+class VescEscHost : public EscHost {
  public:
-  VescPowertrainControlManagerHost(SerialDriver *serial_device,
+  VescEscHost(SerialDriver *serial_device,
       SerialConfig *serial_config)
-          : PowertrainControlManagerHost(serial_device, serial_config) {}
+          : EscHost(serial_device, serial_config) {}
 
  protected:
   virtual void ProcessExchangeState(
@@ -55,7 +55,7 @@ class VescPowertrainControlManagerHost : public PowertrainControlManagerHost {
 static THD_WORKING_AREA(pcmHostThreadWorkingArea, 2048);
 
 static THD_FUNCTION(pcmHostThread, arg) {
-  Singleton<VescPowertrainControlManagerHost>::Instance()->Start();
+  Singleton<VescEscHost>::Instance()->Start();
 }
 
 /* Init/Config ****************************************************************/
@@ -74,7 +74,7 @@ extern "C" void app_uartcomm_start() {
   };
 
   voyager::InitTime();
-  Singleton<VescPowertrainControlManagerHost>::Init(
+  Singleton<VescEscHost>::Init(
       &HW_SERIAL_DEV, &serial_config);
 
   chThdCreateStatic(pcmHostThreadWorkingArea, sizeof(pcmHostThreadWorkingArea),
